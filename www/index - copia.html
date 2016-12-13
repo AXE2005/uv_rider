@@ -1,0 +1,278 @@
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset=utf-8 />
+    <title>Driver - Taxi! Taxi!</title>
+    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+        font-family: 'Open Sans', sans-serif;
+      }
+      #map {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 90%;
+      }
+      #hail {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 10%;
+        width: 100%;
+        background-color: #111;
+        color: #efefef;
+        display: block;
+        font-size: 18px;
+        text-transform: uppercase;
+      }
+      #hail span {
+        position: absolute;
+        text-align: center;
+        display: block;
+        width: 100%;
+        top: 50%;
+        margin-top: -10px;
+      }
+      #hail:hover {
+        background-color: #444;
+        color: #fff;
+      }
+      #hail:active {
+        background-color: #000;
+      }
+
+      #popup {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        background-color: #fff;
+        z-index: 9999;
+        display: none;
+      }
+      #popup .text-wrap {
+        display: block;
+        top: 50%;
+        height: 32px;
+        line-height: 32px;
+        font-size: 32px;
+        color: #000;
+        position: absolute;
+        text-align: center;
+        width: 100%;
+      }
+      .button {
+        border: 1px solid #111;
+        border-radius: 3px;
+        display: block;
+        margin: 42px auto;
+        line-height: 42px;
+        height: 42px;
+        opacity: .8;
+        width: 120px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      .button:hover {
+        opacity: 1;
+      }
+    </style>
+
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+    
+    <script type="text/javascript" src="http://pubnub.github.io/eon/lib/eon.js"></script>
+    <script type="text/javascript" src="cordova.js"></script>    
+    <link type="text/css" rel="stylesheet" href="http://pubnub.github.io/eon/lib/eon.css" />
+
+  </head>
+  <body>
+    <div id="popup">
+      <div class="text-wrap">
+        <p class="text">Tu Conductor esta en camino!</p>
+        <div class="button" onclick="closeAlert()">OK</div>
+      </div>
+    </div>
+    <div id='map'></div>
+    <a id="hail" href="#" onclick="hail()"><span>SOLICITA UNA VAN</span></a>
+    <script>
+
+
+//	                console.log('ran index')
+
+      var channel = "ultravans";
+      var channelmap = "pubnub-mapbox";	  
+      var pubnub = PUBNUB.init({
+        publish_key: 'pub-c-84ee927d-747d-4870-8732-d7af6f6842f2',
+        subscribe_key: 'sub-c-6d23bd3e-fa91-11e5-861b-02ee2ddab7fe'
+      });
+
+      var openAlert = function(text) {
+        $('.text').text(text);
+        $('#popup').show();
+      }
+
+      var closeAlert = function(text) {
+        $('#popup').hide();
+      }
+
+      var hail = function(argument) {
+
+        pubnub.publish({
+          channel: channel,
+          message: 'hail'
+        });
+
+        openAlert('Esperando un Conductor ...');
+
+      };
+
+      L.RotatedMarker = L.Marker.extend({
+        options: { angle: 0 },
+        _setPos: function(pos) {
+          L.Marker.prototype._setPos.call(this, pos);
+          if (L.DomUtil.TRANSFORM) {
+            // use the CSS transform rule if available
+            this._icon.style[L.DomUtil.TRANSFORM] += ' rotate(' + this.options.angle + 'deg)';
+          } else if (L.Browser.ie) {
+            // fallback for IE6, IE7, IE8
+            var rad = this.options.angle * L.LatLng.DEG_TO_RAD,
+            costheta = Math.cos(rad),
+            sintheta = Math.sin(rad);
+            this._icon.style.filter += ' progid:DXImageTransform.Microsoft.Matrix(sizingMethod=\'auto expand\', M11=' +
+              costheta + ', M12=' + (-sintheta) + ', M21=' + sintheta + ', M22=' + costheta + ')';
+          }
+        }
+      });
+
+      pubnub.subscribe({
+        channel: channel,
+        message : function(message,env,channel){
+
+          if(message == 'pickup') {
+            openAlert('Tu conductor esta en camino!');
+          }
+
+        }
+      });
+
+//      var map = eon.map({
+//        id: 'map',
+//        mb_id: 'axe2005.pjoahi8j',
+//        mb_token: 'pk.eyJ1IjoiYXhlMjAwNSIsImEiOiJjaW1ta2IwbzAwMDBhdHBsdjQ1NmExNWQ4In0.gcp7rYA36eoC5pflHIs2Lg',
+//        channel: 'ultravansmap',
+//        rotate: true,
+//        history: true,
+//        pubnub: pubnub,
+//        marker: function (latlng, data) {
+//
+//          var marker = new L.RotatedMarker(latlng, {
+//            icon: L.icon({
+//              iconUrl: 'http://i.imgur.com/yY2XvdH.png',
+//              iconSize: [15, 31]
+//            })
+//          });
+//
+//          marker.bindPopup('<a href="#" onClick="hail()">Llamar a este conductor.</a>');
+//                console.log('marker:'+marker);
+//          return marker;
+//
+//        }
+//      });
+
+//var channel = 'pubnub-mapbox';
+
+eon.map({
+  id: 'map',
+  mb_token: 'pk.eyJ1IjoiaWFuamVubmluZ3MiLCJhIjoiZExwb0p5WSJ9.XLi48h-NOyJOCJuu1-h-Jg',
+  mb_id: 'ianjennings.l896mh2e',
+  channel: channelmap
+});
+
+function connect() {
+
+var pn = PUBNUB.init({
+        publish_key: 'demo',
+        subscribe_key: 'demo'
+      });
+
+
+var comparecor = null;
+	// onSuccess Callback
+// This method accepts a Position object, which contains the
+// current GPS coordinates
+////
+var onSuccess = function(position) {
+
+
+var resultlat = Math.floor( position.coords.latitude * 1000 ) / 1000;
+var resultlng = Math.floor( position.coords.longitude * 1000 ) / 1000;
+
+var newcor = resultlat;
+
+
+
+if (comparecor != newcor){
+ alert('lat: '    + position.coords.latitude    + '\n' +
+         'lng: ' + position.coords.longitude + '\n' +
+		          'peque: ' + resultlat + resultlng + '\n'
+		 );
+var point = {
+  latlng: [resultlat, resultlng]
+};
+//    alert('Latitude: '          + position.coords.latitude          + '\n' +
+//          'Longitude: '         + position.coords.longitude         + '\n' +
+//          'Altitude: '          + position.coords.altitude          + '\n' +
+//          'Accuracy: '          + position.coords.accuracy          + '\n' +
+//          'Altitude Accuracy: ' + position.coords.altitudeAccuracy  + '\n' +
+//          'Heading: '           + position.coords.heading           + '\n' +
+//          'Speed: '             + position.coords.speed             + '\n' +
+//          'Timestamp: '         + position.timestamp                + '\n');
+
+//setInterval(function(){
+
+  var new_point = JSON.parse(JSON.stringify(point));
+
+ // new_point.latlng = [
+//    new_point.latlng[0] + (getNonZeroRandomNumber() * 0.1),
+//    new_point.latlng[1] + (getNonZeroRandomNumber() * 0.2)
+//  ];
+
+  pn.publish({
+    channel: channel,
+    message: [new_point] // even a single point should be an array
+  });
+
+//}, 1000);
+var comparecor = resultlat;
+}
+else{return;}
+};
+//
+//// onError Callback receives a PositionError object
+//
+function onError(error) {
+    alert('code: '    + error.code    + '\n' +
+          'message: ' + error.message + '\n');
+}
+
+
+
+
+ 
+
+//navigator.geolocation.getCurrentPosition(onSuccess, onError);
+var watchID = navigator.geolocation.watchPosition(onSuccess, onError, { timeout: 30000, enableHighAccuracy: true });
+
+};
+
+    </script>
+  </body>
+</html>
