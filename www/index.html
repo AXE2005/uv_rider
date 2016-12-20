@@ -1,118 +1,76 @@
-
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset=utf-8 />
-    <title>Driver - Taxi! Taxi!</title>
-    <link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
-    <meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
-    <style>
-      body {
-        margin: 0;
-        padding: 0;
-        font-family: 'Open Sans', sans-serif;
-      }
-      #map {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 90%;
-      }
-      #hail {
-        position: absolute;
-        bottom: 0;
-        left: 0;
-        height: 10%;
-        width: 100%;
-        background-color: #111;
-        color: #efefef;
-        display: block;
-        font-size: 18px;
-        text-transform: uppercase;
-      }
-      #hail span {
-        position: absolute;
-        text-align: center;
-        display: block;
-        width: 100%;
-        top: 50%;
-        margin-top: -10px;
-      }
-      #hail:hover {
-        background-color: #444;
-        color: #fff;
-      }
-      #hail:active {
-        background-color: #000;
-      }
-
-      #popup {
-        width: 100%;
-        height: 100%;
-        position: absolute;
-        top: 0;
-        left: 0;
-        background-color: #fff;
-        z-index: 9999;
-        display: none;
-      }
-      #popup .text-wrap {
-        display: block;
-        top: 50%;
-        height: 32px;
-        line-height: 32px;
-        font-size: 32px;
-        color: #000;
-        position: absolute;
-        text-align: center;
-        width: 100%;
-      }
-      .button {
-        border: 1px solid #111;
-        border-radius: 3px;
-        display: block;
-        margin: 42px auto;
-        line-height: 42px;
-        height: 42px;
-        opacity: .8;
-        width: 120px;
-        font-size: 16px;
-        cursor: pointer;
-      }
-      .button:hover {
-        opacity: 1;
-      }
-
-    </style>
-
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    
-    <script type="text/javascript" src="http://pubnub.github.io/eon/lib/eon.js"></script>
-    <script type="text/javascript" src="cordova.js"></script>    
-    <link type="text/css" rel="stylesheet" href="http://pubnub.github.io/eon/lib/eon.css" />
-    
-    <script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js'></script>
+<head>
+<meta charset=utf-8 />
+<title>Driver - Taxi! Taxi!</title>
+<link href='http://fonts.googleapis.com/css?family=Roboto' rel='stylesheet' type='text/css'>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<link href="css/boostrap/bootstrap.css" rel="stylesheet" type="text/css">
+<link href="js/jquery_mobile/jquery.mobile-1.4.5.min.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="css/index.css">
+<link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+<script type="text/javascript" src="http://pubnub.github.io/eon/lib/eon.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
+<link type="text/css" rel="stylesheet" href="http://pubnub.github.io/eon/lib/eon.css" />
+<script src='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.min.js'></script>
 <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.mapbox.css' rel='stylesheet' />
 <!--[if lt IE 9]>
   <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/L.Control.Locate.ie.css' rel='stylesheet' />
 <![endif]-->
 <link href='https://api.mapbox.com/mapbox.js/plugins/leaflet-locatecontrol/v0.43.0/css/font-awesome.min.css' rel='stylesheet' />
-  </head>
-  <body>
-    <div id="popup">
-      <div class="text-wrap">
-        <p class="text">Tu Conductor esta en camino!</p>
-        <div class="button" onclick="closeAlert()">OK</div>
-      </div>
+</head>
+<body>
+<div id="popup">
+  <div class="text-wrap">
+    <p class="text">Tu Conductor esta en camino!</p>
+    <div class="button" onclick="closeAlert()">OK</div>
+  </div>
+</div>
+
+<header>
+  <div class="container">
+    <div class="row">
+      <div id="suscribetebtn" class="col-xs-4"><img src="img/suscribete_btn.png" class="img-responsive center-block" alt="Responsive image"></div>
+      <div id="logouv" class="col-xs-4"><img src="img/logo_uv.png" class="img-responsive center-block" alt="Responsive image"></div>
+      <div id="menubtn" class="col-xs-4"><img src="img/menu_btn.png" class="img-responsive center-block" alt="Responsive image"></div>
+    </div>
+  </div>
+</header>
+<div class="container-fluid">
+  <div class="row">
+    <div id='map' class="col-xs-12 col-sm-12"></div>
+    
+    <div class="col-xs-12 col-sm-12">
+    <input id="ingreseubi" type="text" class="form-control" placeholder="Ingrese su ubicación">
+    </div>
+    
+    <div id="cont_dest_tiem" class="container">    
+    <div class="row">
+    <div class="col-xs-9 col-sm-9">
+    <input type="text" class="form-control" placeholder="Destino">
+    </div>
+    <div class="col-xs-9 col-sm-9">
+    <input type="text" class="form-control" placeholder="tiempo viaje">
+    </div>
+     <div id="pre_btn" class="col-xs-3 col-sm-3">
+     <img src="img/pregunta_btn.png" class="img-responsive center-block" alt="Responsive image">
+     </div>
+     </div>     
+    </div>
+    
+    </div>
+   </div>
+
+
+	<div class="container">
+    <div class="row">
+    <a id="hail" href="#" onclick="hail()"><span><img src="img/sig_btn.png" class="img-responsive center-block" alt="Responsive image"></span></a>
+    </div>
     </div>
 
-<div id='map'></div>
-
-
-    <a id="hail" href="#" onclick="hail()"><span>SOLICITA UNA VAN</span></a>
-    <script>
+ 
+<script>
 
 //        var point = {
 //         latlng: [4.701556, -74.079812]
@@ -347,6 +305,8 @@ var watchID = navigator.geolocation.watchPosition(onSuccess, onError, { timeout:
       };
 L.control.locate().addTo(map);
 
-    </script>
-  </body>
+    </script> 
+<script type="text/javascript" language="javascript" src="js/boostrap/bootstrap.js"></script> 
+<script type="text/javascript" language="javascript" src="js/jquery_mobile/jquery.mobile-1.4.5.min.js"></script>
+</body>
 </html>
