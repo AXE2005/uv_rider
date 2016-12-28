@@ -1,0 +1,93 @@
+body {
+	margin: 0;
+	padding: 0;
+	font-family: 'Open Sans', sans-serif;
+}
+header {
+	background: #302683;
+	color: #F00;
+	height: 30px;
+	padding-top: 5px;
+}
+#btn_soli_servi {
+	position: absolute;
+	bottom: 2%;
+	width: 45%;
+}
+#sec_fotoconductor {
+	position: absolute;
+	background: #9D9C9C;
+	width: 100%;
+	height: 96%;
+	top: 4%;
+	display: flex;
+	justify-content: center;
+}
+#col_baja {
+	background: rgba(198,198,197,1);
+	background: -moz-linear-gradient(-45deg, rgba(198,198,197,1) 0%, rgba(255,255,255,1) 100%);
+	background: -webkit-gradient(left top, right bottom, color-stop(0%, rgba(198,198,197,1)), color-stop(100%, rgba(255,255,255,1)));
+	background: -webkit-linear-gradient(-45deg, rgba(198,198,197,1) 0%, rgba(255,255,255,1) 100%);
+	background: -o-linear-gradient(-45deg, rgba(198,198,197,1) 0%, rgba(255,255,255,1) 100%);
+	background: -ms-linear-gradient(-45deg, rgba(198,198,197,1) 0%, rgba(255,255,255,1) 100%);
+	background: linear-gradient(135deg, rgba(198,198,197,1) 0%, rgba(255,255,255,1) 100%);
+ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#c6c6c5', endColorstr='#ffffff', GradientType=1 );
+	position: absolute;
+	width: 80%;
+	height: 50%;
+	top: 11%;
+	display: flex;
+	justify-content: center;
+}
+#selec_tservicio {
+	font-weight: bold;
+	color: #302683;
+	-webkit-box-shadow: 0px 5px 15px 3px rgba(0,0,0,0.75);
+	-moz-box-shadow: 0px 5px 15px 3px rgba(0,0,0,0.75);
+	box-shadow: 0px 5px 15px 3px rgba(0,0,0,0.75);
+	padding: 20px;
+	background: #302683;
+	position: absolute;
+	z-index: 3;
+	top: 13%;
+	width: 90%;
+	height: 20%;
+}
+#fotocirculo {
+	position: absolute;
+	background: #FFF;
+	width: 45%;
+	height: 0;
+	padding-bottom: 45%;
+	-moz-border-radius: 50%;
+	-webkit-border-radius: 50%;
+	border-radius: 50%;
+	z-index: 4;
+	top: 14%;
+	-webkit-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.50);
+	-moz-box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.50);
+	box-shadow: 0px 0px 15px 0px rgba(0,0,0,0.50);
+}
+
+.menu_btn {
+	padding:3%;
+	background:#C6C6C5;
+	color:#302683;
+	border-radius:5px;
+	margin-top:4%;
+	font-weight:bold;
+}
+
+#infohistoria {
+	position:absolute;
+	width:90%;
+	height:auto;
+	bottom:5%;	
+	}
+#titulo_cuenta {
+	text-align:center;
+	position:relative;
+	top:3%;
+	width:80%;
+	height:30%;
+	}
